@@ -10,90 +10,46 @@ Original file is located at
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
 
-dataset=pd.read_csv('Regression-AreaPrice.csv')
-X = dataset.iloc[:, :-1].values
-y = dataset.iloc[:, -1].values
-print(X)
-print(y)
+# Importer les données à partir du fichier CSV
+dataset = pd.read_csv('Regression-AreaPrice.csv')
 
-pr_Lg=dataset.head(5)
-print(pr_Lg)
+# Afficher les 5 premières lignes du dataframe
+print(dataset.head(5))
 
-X = dataset['Area']
-print(X)
+# Créer les vecteurs X et y
+X = dataset['Price'].values.reshape(-1, 1)  # Choisir la colonne 'Price' comme entrée
+y = dataset['Area'].values  # Choisir la colonne 'Area' comme sortie
 
-y = dataset['Price']
-print(y)
-
-import matplotlib.pyplot as plt
-
-# Créer des données de surface et de prix (remplacez-les par vos données réelles)
-surface = [100, 150, 200, 250, 300]
-prix = [200000, 250000, 300000, 350000, 400000]
-
-# Créer un nuage de points
-plt.scatter(surface, prix, marker='o', color='b')
-
-# Titres des axes
-plt.xlabel('Surface (m²)')
-plt.ylabel('Prix ($)')
-# Titre de la figure
+# Tracer le nuage de points : Prix en fonction de la Surface
+plt.scatter(X, y, marker='o', color='b')
+plt.xlabel('Price (m²)')
+plt.ylabel('Area ($)')
 plt.title('Nuage de points : Prix en fonction de la Surface')
-
-# Afficher le graphique
 plt.show()
 
-from sklearn.linear_model import LinearRegression
-import numpy as np
-
-# Exemple de données (remplacez-les par vos données réelles)
-surface = np.array([100, 150, 200, 250, 300]).reshape(-1, 1)  # Variable indépendante (X)
-prix = np.array([200000, 250000, 300000, 350000, 400000])  # Variable dépendante (y)
-
-# Créer un modèle de régression linéaire
+# Créer un modèle de régression linéaire et lancer l'apprentissage
 model = LinearRegression()
+model.fit(X, y)
 
-model.fit(surface, prix)
-
+# Afficher les coefficients du modèle
 coef = model.coef_
 intercept = model.intercept_
-
 print(f'Coefficient de pente : {coef[0]}')
 print(f'Ordonnée à l"origine : {intercept}')
 
-import numpy as np
-# Afficher la taille de X
-print(X.shape)
-
-import pandas as pd
-# Afficher la taille de X
-print(len(X))
-
-X = X.reshape(-1, 1)
-
-# Supposons que vous avez déjà créé et entraîné le modèle de régression linéaire et que votre surface est de 400.
+# Lancer la prédiction pour une surface 400
 nouvelle_surface = np.array([400]).reshape(-1, 1)  # La surface pour la prédiction
-
-# Utilisez le modèle pour faire la prédiction
 prediction = model.predict(nouvelle_surface)
-
 print(f"Pour une surface de 400 m², le prix prédit est : {prediction[0]}")
 
-# Utilisez le modèle pour faire des prédictions pour tout le vecteur X
+# Lancer la prédiction pour tout le vecteur X
 predictions = model.predict(X)
-
-# Afficher les prédictions
 for i, prediction in enumerate(predictions):
     print(f"Pour une surface de {X[i][0]} m², le prix prédit est : {prediction}")
 
-from sklearn.metrics import r2_score
-
-# Supposons que vous avez déjà créé et entraîné le modèle de régression linéaire
-# et que vous avez obtenu des prédictions.
-predictions = model.predict(X)
-
-# Calcul du score R2
-r2 = r2_score(prix, predictions)
-
+# Calculer le score R2
+r2 = r2_score(y, predictions)
 print(f"Score R2 : {r2}")
