@@ -12,8 +12,8 @@ sns.countplot(x='purpose', data=data)
 # Convertir la colonne 'purpose' en variables dummies
 data = pd.get_dummies(data, columns=['purpose'])
 # Définir les caractéristiques (features) X et la variable cible (target) Y
-X = data.drop('target_column_name_here', axis=1)  # Remplacez 'target_column_name_here' par le nom de votre variable cible
-Y = data['target_column_name_here']  # Remplacez 'target_column_name_here' par le nom de votre variable cible
+X = data.drop('purpose', axis=1)  
+Y = data['installement'] 
 # Diviser le dataset en données d'apprentissage et de test
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=42)
 # Créer le modèle Naive Bayes Gaussian
